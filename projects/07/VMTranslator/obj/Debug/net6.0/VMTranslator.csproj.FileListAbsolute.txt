@@ -1,0 +1,15 @@
+C:\src\GitHub\glennc\nandtet\projects\07\VMTranslator\bin\Debug\net6.0\VMTranslator.exe
+C:\src\GitHub\glennc\nandtet\projects\07\VMTranslator\bin\Debug\net6.0\VMTranslator.deps.json
+C:\src\GitHub\glennc\nandtet\projects\07\VMTranslator\bin\Debug\net6.0\VMTranslator.runtimeconfig.json
+C:\src\GitHub\glennc\nandtet\projects\07\VMTranslator\bin\Debug\net6.0\VMTranslator.dll
+C:\src\GitHub\glennc\nandtet\projects\07\VMTranslator\bin\Debug\net6.0\VMTranslator.pdb
+C:\src\GitHub\glennc\nandtet\projects\07\VMTranslator\obj\Debug\net6.0\VMTranslator.csproj.AssemblyReference.cache
+C:\src\GitHub\glennc\nandtet\projects\07\VMTranslator\obj\Debug\net6.0\VMTranslator.GeneratedMSBuildEditorConfig.editorconfig
+C:\src\GitHub\glennc\nandtet\projects\07\VMTranslator\obj\Debug\net6.0\VMTranslator.AssemblyInfoInputs.cache
+C:\src\GitHub\glennc\nandtet\projects\07\VMTranslator\obj\Debug\net6.0\VMTranslator.AssemblyInfo.cs
+C:\src\GitHub\glennc\nandtet\projects\07\VMTranslator\obj\Debug\net6.0\VMTranslator.csproj.CoreCompileInputs.cache
+C:\src\GitHub\glennc\nandtet\projects\07\VMTranslator\obj\Debug\net6.0\VMTranslator.dll
+C:\src\GitHub\glennc\nandtet\projects\07\VMTranslator\obj\Debug\net6.0\refint\VMTranslator.dll
+C:\src\GitHub\glennc\nandtet\projects\07\VMTranslator\obj\Debug\net6.0\VMTranslator.pdb
+C:\src\GitHub\glennc\nandtet\projects\07\VMTranslator\obj\Debug\net6.0\VMTranslator.genruntimeconfig.cache
+C:\src\GitHub\glennc\nandtet\projects\07\VMTranslator\obj\Debug\net6.0\ref\VMTranslator.dll

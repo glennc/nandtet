@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "VMTranslator": {
+      "commandName": "Project",
+      "commandLineArgs": "C:\\src\\GitHub\\glennc\\nandtet\\projects\\07\\StackArithmetic\\StackTest\\StackTest.vm"
+    }
+  }
+}

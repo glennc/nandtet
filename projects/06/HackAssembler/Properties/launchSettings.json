@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "HackAssembler": {
+      "commandName": "Project",
+      "commandLineArgs": "Max.asm",
+      "workingDirectory": "../max"
+    }
+  }
+}
