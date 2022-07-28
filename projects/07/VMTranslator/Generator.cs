@@ -4,11 +4,13 @@ public class HackAssemblyGenerator : IDisposable
 {
 	private Stream _output;
 	private StreamWriter _outputWriter;
+	private string _fileName;
 
-	public HackAssemblyGenerator(Stream output)
+	public HackAssemblyGenerator(Stream output, string filename)
 	{
 		_output = output;
 		_outputWriter = new StreamWriter(output);
+		_fileName = filename;
 	}
 
 	public void Write(VMCommand command)
@@ -157,6 +159,9 @@ public class HackAssemblyGenerator : IDisposable
                         WritePushSegmentToStack(_outputWriter, "THAT", "0", false);
                     }
 					break;
+				case "static":
+					WritePushSegmentToStack(_outputWriter, $"{_fileName}.{command.Arg2}", "0", false);
+                    break;
                 default:
 					throw new NotImplementedException("Unknown Arg1 in Push");
 			}
@@ -189,6 +194,9 @@ public class HackAssemblyGenerator : IDisposable
 					{
                         WritePop(_outputWriter, "THAT", "0", false);
                     }
+					break;
+				case "static":
+					WritePop(_outputWriter, $"{_fileName}.{command.Arg2}", "0", false);
 					break;
                 default:
                     throw new NotImplementedException("Unknown Arg1 in Pop");

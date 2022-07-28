@@ -2,7 +2,7 @@
   "profiles": {
     "VMTranslator": {
       "commandName": "Project",
-      "commandLineArgs": "C:\\src\\GitHub\\glennc\\nandtet\\projects\\07\\MemoryAccess\\PointerTest\\PointerTest.vm"
+      "commandLineArgs": "C:\\src\\GitHub\\glennc\\nandtet\\projects\\07\\MemoryAccess\\StaticTest\\StaticTest.vm"
     }
   }
 }
