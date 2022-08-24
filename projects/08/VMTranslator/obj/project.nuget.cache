@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "PxLptUtsdi0ts7OtNvnvT+s9fj47Pgk6xrabk1nYWkC24nAePp5cRn9r/xOqUW1OM3SCxU/NuyZZ8OmU09DXsQ==",
+  "success": true,
+  "projectFilePath": "C:\\src\\GitHub\\glennc\\nandtet\\projects\\08\\VMTranslator\\VMTranslator.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\glenn\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.6\\microsoft.windowsdesktop.app.ref.6.0.6.nupkg.sha512",
+    "C:\\Users\\glenn\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.6\\microsoft.netcore.app.ref.6.0.6.nupkg.sha512",
+    "C:\\Users\\glenn\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.6\\microsoft.aspnetcore.app.ref.6.0.6.nupkg.sha512",
+    "C:\\Users\\glenn\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\6.0.6\\microsoft.netcore.app.host.win-x64.6.0.6.nupkg.sha512"
+  ],
+  "logs": []
+}
