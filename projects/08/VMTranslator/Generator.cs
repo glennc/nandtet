@@ -43,12 +43,87 @@ public class HackAssemblyGenerator : IDisposable
 				WriteIf(command);
 				break;
 			case VMCommandType.C_FUNCTION:
+				WriteFunction(command);
+				break;
 			case VMCommandType.C_RETURN:
+				WriteReturn(command);
+				break;
 			case VMCommandType.C_CALL:
 			default:
 				throw new NotImplementedException();
 		};
 	}
+
+	private void WriteReturn(VMCommand command)
+	{
+        _outputWriter.WriteLine("//return");
+
+		//LCL should be at the beginning of the stored FRAME that we need to revert to.
+		_outputWriter.WriteLine("@LCL");
+		_outputWriter.WriteLine("D=M");
+		_outputWriter.WriteLine("@R13");
+		_outputWriter.WriteLine("M=D");
+
+		//now go back 5 from R13 to get the return address.
+		ResetFromFrame("R14", 5);
+
+		//point ARG at the return value as the caller expects.
+		_outputWriter.WriteLine("@SP");
+		_outputWriter.WriteLine("A=M-1");
+		_outputWriter.WriteLine("D=M");
+		_outputWriter.WriteLine("@ARG");
+		_outputWriter.WriteLine("A=M");
+		_outputWriter.WriteLine("M=D");
+
+		//Point SP to ARG +1
+		_outputWriter.WriteLine("@ARG");
+		_outputWriter.WriteLine("D=M+1");
+		_outputWriter.WriteLine("@SP");
+		_outputWriter.WriteLine("M=D");
+
+		ResetFromFrame("THAT", 1);
+		ResetFromFrame("THIS", 2);
+		ResetFromFrame("ARG", 3);
+		ResetFromFrame("LCL", 4);
+
+        //goto return addres that was saved in R14.
+        _outputWriter.WriteLine("@R14");
+		_outputWriter.WriteLine("A=M");
+		_outputWriter.WriteLine("0;JMP");
+    }
+
+	private void ResetFromFrame(string segment, int index)
+	{
+        //From the reference point of R13 move backwards by index and assign that to the given segment. Allows implementing segment = *(frame - index) pg161
+        _outputWriter.WriteLine("@R13");
+		if (index == 1)
+		{
+			_outputWriter.WriteLine("A=M-1");
+		}
+		else
+		{
+			_outputWriter.WriteLine("D=M");
+			_outputWriter.WriteLine($"@{index}");
+			_outputWriter.WriteLine("A=D-A");
+		}
+        _outputWriter.WriteLine("D=M");
+        _outputWriter.WriteLine($"@{segment}");
+        _outputWriter.WriteLine("M=D");
+    }
+
+    private void WriteFunction(VMCommand command)
+	{
+		//TODO: Probably shouldn't scatter the assembly syntax for writing a label around the file.
+		//Write label fo function name.
+        _outputWriter.WriteLine($"({command.Arg1})");
+		//Setup functions memory.
+        //Pop stack values into local, calee will push onto stack each argument before CALL.
+        for (int i = 0; i < int.Parse(command.Arg2); i++)
+		{
+			//WritePop(_outputWriter, "ARG", i.ToString());
+			WritePushD(_outputWriter, "SP");
+		}
+    }
 
 	public void WriteArithmatic(VMCommand command)
 	{

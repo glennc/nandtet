@@ -24,7 +24,8 @@ public class Parser
     {
         "add",
         "sub",
-        "neg"
+        "neg",
+        "not"
     };
 
     public void Advance()
@@ -46,30 +47,18 @@ public class Parser
         var commandSegments = line.Split(" ");
         var commandText = commandSegments[0];
 
-        if (commandText == "push")
+        command.CommandType = commandText switch
         {
-            command.CommandType = VMCommandType.C_PUSH;
-        }
-        else if (commandText == "pop")
-        {
-            command.CommandType = VMCommandType.C_POP;
-        }
-        else if (commandText.Contains("label"))
-        {
-            command.CommandType = VMCommandType.C_LABEL;
-        }
-        else if (commandText.Contains("if-goto"))
-        {
-            command.CommandType = VMCommandType.C_IF;
-        }
-        else if (commandText.Contains("goto"))
-        {
-            command.CommandType = VMCommandType.C_GOTO;
-        }
-        else if (_arithmeticCommands.Contains(commandText))
-        {
-            command.CommandType = VMCommandType.C_ARITHMETIC;
-        }
+            "push" => VMCommandType.C_PUSH,
+            "pop" => VMCommandType.C_POP,
+            "label" => VMCommandType.C_LABEL,
+            "if-goto" => VMCommandType.C_IF,
+            "goto" => VMCommandType.C_GOTO,
+            "function" => VMCommandType.C_FUNCTION,
+            "return" => VMCommandType.C_RETURN,
+            string when _arithmeticCommands.Contains(commandText) => VMCommandType.C_ARITHMETIC,
+            _ => throw new Exception("Unknown command text")
+        };
 
         if (commandSegments.Length == 1)
         {
@@ -86,5 +75,4 @@ public class Parser
 
         CurrentCommand = command;
     }
-
 }
