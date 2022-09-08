@@ -1,12 +1,15 @@
 
 
+using System.Xml.Serialization;
+
 public class HackAssemblyGenerator : IDisposable
 {
 	private Stream _output;
 	private StreamWriter _outputWriter;
 	private string _fileName;
+    private Random _rnd = new Random();
 
-	public HackAssemblyGenerator(Stream output, string filename) : this(output)
+    public HackAssemblyGenerator(Stream output, string filename) : this(output)
 	{
 		_fileName = filename;
 	}
@@ -15,7 +18,25 @@ public class HackAssemblyGenerator : IDisposable
 	{
 		_output = stream;
         _outputWriter = new StreamWriter(stream);
+
+        //Initialize VM.
+        _outputWriter.WriteLine("@256");
+        _outputWriter.WriteLine("D=A");
+        _outputWriter.WriteLine("@SP");
+        _outputWriter.WriteLine("M=D");
+
+		var cmd = new VMCommand("call Sys.init 0")
+		{
+			Arg1 = "Sys.init",
+			Arg2 = "0",
+			CommandType = VMCommandType.C_CALL
+		};
+		WriteCall(cmd);
+
+		//_outputWriter.WriteLine("@Sys.init");
+		//_outputWriter.WriteLine("0;JMP");
     }
+
     internal void SetFile(string fileName)
     {
         _fileName = fileName;
@@ -23,7 +44,7 @@ public class HackAssemblyGenerator : IDisposable
 
     public void Write(VMCommand command)
 	{
-		_outputWriter.WriteLine("//" + command.Source);
+		_outputWriter.WriteLine("//Command:" + command.Source);
 		switch (command.CommandType)
 		{
 			case VMCommandType.C_ARITHMETIC:
@@ -49,10 +70,51 @@ public class HackAssemblyGenerator : IDisposable
 				WriteReturn(command);
 				break;
 			case VMCommandType.C_CALL:
+				WriteCall(command);
+				break;
 			default:
 				throw new NotImplementedException();
 		};
 	}
+
+	private void WriteCall(VMCommand command)
+	{
+		//label ID for return address.
+		//TODO: This can probably just be a constant string with an incrementing ID.
+		var returnId = _rnd.Next().ToString("x");
+		SaveSegment(returnId);
+		SaveSegment("LCL");
+		SaveSegment("ARG");
+		SaveSegment("THIS");
+		SaveSegment("THAT");
+
+		//Point ARG at the first ARG value being sent to the function.
+		//which is SP-5-nVarArgs
+		_outputWriter.WriteLine($"@{5+int.Parse(command.Arg2)}");
+        _outputWriter.WriteLine("D=A");
+        _outputWriter.WriteLine("@SP");
+        _outputWriter.WriteLine("D=M-D");
+		_outputWriter.WriteLine("@ARG");
+		_outputWriter.WriteLine("M=D");
+
+		//position LCL which should be at SP.
+		_outputWriter.WriteLine("@SP");
+		_outputWriter.WriteLine("D=M");
+		_outputWriter.WriteLine("@LCL");
+		_outputWriter.WriteLine("M=D");
+
+		_outputWriter.WriteLine($"@{command.Arg1}");
+		_outputWriter.WriteLine("0;JMP");
+
+        _outputWriter.WriteLine($"({returnId})");
+    }
+
+    private void SaveSegment(string segment)
+	{
+        _outputWriter.WriteLine($"@{segment}");
+        _outputWriter.WriteLine("D=A");
+        WritePushDToStack(_outputWriter);
+    }
 
 	private void WriteReturn(VMCommand command)
 	{
@@ -114,14 +176,15 @@ public class HackAssemblyGenerator : IDisposable
     private void WriteFunction(VMCommand command)
 	{
 		//TODO: Probably shouldn't scatter the assembly syntax for writing a label around the file.
-		//Write label fo function name.
+		//Write label for function name.
         _outputWriter.WriteLine($"({command.Arg1})");
 		//Setup functions memory.
-        //Pop stack values into local, calee will push onto stack each argument before CALL.
+		_outputWriter.WriteLine("D=0");
         for (int i = 0; i < int.Parse(command.Arg2); i++)
 		{
 			//WritePop(_outputWriter, "ARG", i.ToString());
-			WritePushD(_outputWriter, "SP");
+			WritePushDToStack(_outputWriter);
+			//WritePushSegmentToStack(_outputWriter, "ARG", i.ToString());
 		}
     }
 
@@ -177,7 +240,6 @@ public class HackAssemblyGenerator : IDisposable
 
     private void WriteGoto(VMCommand command)
     {
-		WritePPop(_outputWriter);
 		_outputWriter.WriteLine($"@{command.Arg1}");
 		_outputWriter.WriteLine("0; JMP");
     }
@@ -412,9 +474,9 @@ public class HackAssemblyGenerator : IDisposable
 
 	internal void Done()
 	{
-        _outputWriter.WriteLine("(INFINITE_LOOP)");
-        _outputWriter.WriteLine("	@INFINITE_LOOP");
-        _outputWriter.WriteLine("	0; JMP");
+		_outputWriter.WriteLine("(INFINITE_LOOP)");
+		_outputWriter.WriteLine("	@INFINITE_LOOP");
+		_outputWriter.WriteLine("	0; JMP");
 		_outputWriter.Flush();
     }
 }

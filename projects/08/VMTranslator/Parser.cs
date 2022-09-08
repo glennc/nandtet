@@ -25,7 +25,8 @@ public class Parser
         "add",
         "sub",
         "neg",
-        "not"
+        "not",
+        "lt"
     };
 
     public void Advance()
@@ -56,6 +57,7 @@ public class Parser
             "goto" => VMCommandType.C_GOTO,
             "function" => VMCommandType.C_FUNCTION,
             "return" => VMCommandType.C_RETURN,
+            "call" => VMCommandType.C_CALL,
             string when _arithmeticCommands.Contains(commandText) => VMCommandType.C_ARITHMETIC,
             _ => throw new Exception("Unknown command text")
         };
