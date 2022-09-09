@@ -2,7 +2,7 @@
 D=A
 @SP
 M=D
-@7258dc22
+@47b0c32f
 D=A
 //Push D to SP
 @SP
@@ -54,7 +54,7 @@ D=M
 M=D
 @Sys.init
 0;JMP
-(7258dc22)
+(47b0c32f)
 //Command:function Main.fibonacci 0
 (Main.fibonacci)
 D=0
@@ -91,14 +91,14 @@ M=M-1
 A=M
 //END Partial Pop
 D=M-D
-@6245e5e964f24d3cafd604b77661778f
+@47e17a8ac7b64cacbca9beef83e7a6f6
 D;JLT
-D=-1
-@6165e20e02234ed9b81d984cfb59f981
+D=0
+@9452f9ee1d9f4186b6007e9749a5954c
 	0;JMP
-(6245e5e964f24d3cafd604b77661778f)
-	D=0
-(6165e20e02234ed9b81d984cfb59f981)
+(47e17a8ac7b64cacbca9beef83e7a6f6)
+	D=-1
+(9452f9ee1d9f4186b6007e9749a5954c)
 //Push D to SP
 @SP
 A=M
@@ -112,8 +112,9 @@ M=M+1
 M=M-1
 A=M
 //END Partial Pop
+D=M
 @IF_TRUE
-M; JEQ
+D; JNE
 //Command:goto IF_FALSE
 @IF_FALSE
 0; JMP
@@ -225,7 +226,7 @@ M=D
 M=M+1
 //- completed.
 //Command:call Main.fibonacci 1  // computes fib(n-2)
-@39abb806
+@34fe9d5f
 D=A
 //Push D to SP
 @SP
@@ -277,7 +278,7 @@ D=M
 M=D
 @Main.fibonacci
 0;JMP
-(39abb806)
+(34fe9d5f)
 //Command:push argument 0
 //Push ARG[0] to Stack
 @ARG
@@ -319,7 +320,7 @@ M=D
 M=M+1
 //- completed.
 //Command:call Main.fibonacci 1  // computes fib(n-1)
-@489f2b63
+@6d3e4945
 D=A
 //Push D to SP
 @SP
@@ -371,7 +372,7 @@ D=M
 M=D
 @Main.fibonacci
 0;JMP
-(489f2b63)
+(6d3e4945)
 //Command:add                    // returns fib(n-1) + fib(n-2)
 //Partial Pop, point to memory address but don't move to register or operate on.
 @SP
@@ -457,7 +458,7 @@ M=D
 @SP
 M=M+1
 //Command:call Main.fibonacci 1   // computes the 4'th fibonacci element
-@4173239a
+@6d27c19a
 D=A
 //Push D to SP
 @SP
@@ -509,7 +510,7 @@ D=M
 M=D
 @Main.fibonacci
 0;JMP
-(4173239a)
+(6d27c19a)
 //Command:label WHILE
 (WHILE)
 //Command:goto WHILE              // loops infinitely

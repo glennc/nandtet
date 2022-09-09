@@ -9,33 +9,36 @@ public class HackAssemblyGenerator : IDisposable
 	private string _fileName;
     private Random _rnd = new Random();
 
-    public HackAssemblyGenerator(Stream output, string filename) : this(output)
+    public HackAssemblyGenerator(Stream output, string filename, bool bootstrap) : this(output, bootstrap)
 	{
 		_fileName = filename;
 	}
 
-	public HackAssemblyGenerator(Stream stream)
+	public HackAssemblyGenerator(Stream stream, bool bootstrap)
 	{
 		_output = stream;
         _outputWriter = new StreamWriter(stream);
 
-        //Initialize VM.
-        _outputWriter.WriteLine("@256");
-        _outputWriter.WriteLine("D=A");
-        _outputWriter.WriteLine("@SP");
-        _outputWriter.WriteLine("M=D");
-
-		var cmd = new VMCommand("call Sys.init 0")
+		if (bootstrap)
 		{
-			Arg1 = "Sys.init",
-			Arg2 = "0",
-			CommandType = VMCommandType.C_CALL
-		};
-		WriteCall(cmd);
+			//Initialize VM.
+			_outputWriter.WriteLine("@256");
+			_outputWriter.WriteLine("D=A");
+			_outputWriter.WriteLine("@SP");
+			_outputWriter.WriteLine("M=D");
+
+			var cmd = new VMCommand("call Sys.init 0")
+			{
+				Arg1 = "Sys.init",
+				Arg2 = "0",
+				CommandType = VMCommandType.C_CALL
+			};
+			WriteCall(cmd);
+		}
 
 		//_outputWriter.WriteLine("@Sys.init");
 		//_outputWriter.WriteLine("0;JMP");
-    }
+	}
 
     internal void SetFile(string fileName)
     {
@@ -234,13 +237,14 @@ public class HackAssemblyGenerator : IDisposable
     private void WriteIf(VMCommand command)
     {
 		WritePPop(_outputWriter);
-		_outputWriter.WriteLine($"@{command.Arg1}");
-		_outputWriter.WriteLine("M; JEQ");
+		_outputWriter.WriteLine("D=M");
+        _outputWriter.WriteLine($"@{command.Arg1}");
+		_outputWriter.WriteLine("D; JNE");
     }
 
     private void WriteGoto(VMCommand command)
     {
-		_outputWriter.WriteLine($"@{command.Arg1}");
+        _outputWriter.WriteLine($"@{command.Arg1}");
 		_outputWriter.WriteLine("0; JMP");
     }
 

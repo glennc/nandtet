@@ -1,4 +1,4 @@
-//push constant 0
+//Command:push constant 0
 @0
 D=A
 //Push D to SP
@@ -7,27 +7,21 @@ A=M
 M=D
 @SP
 M=M+1
-//pop local 0         // initializes sum = 0
-//Pop to LCL[]
-@LCL
-A=M
-D=A
-@
-D=D+A
-@R15
-M=D
+//Command:pop local 0         // initializes sum = 0
+//Pop to LCL[0]
 //Partial Pop, point to memory address but don't move to register or operate on.
 @SP
 M=M-1
 A=M
 //END Partial Pop
 D=M
-@R15
+@LCL
 A=M
 M=D
-//END Pop to LCL[]
-//label LOOP_START
-(LOOP_START)//push argument 0
+//END Pop to LCL[0]
+//Command:label LOOP_START
+(LOOP_START)
+//Command:push argument 0
 //Push ARG[0] to Stack
 @ARG
 A=M
@@ -38,7 +32,7 @@ A=M
 M=D
 @SP
 M=M+1
-//push local 0
+//Command:push local 0
 //Push LCL[0] to Stack
 @LCL
 A=M
@@ -49,7 +43,7 @@ A=M
 M=D
 @SP
 M=M+1
-//add
+//Command:add
 //Partial Pop, point to memory address but don't move to register or operate on.
 @SP
 M=M-1
@@ -69,26 +63,19 @@ M=D
 @SP
 M=M+1
 //+ completed.
-//pop local 0	        // sum = sum + counter
-//Pop to LCL[]
-@LCL
-A=M
-D=A
-@
-D=D+A
-@R15
-M=D
+//Command:pop local 0	        // sum = sum + counter
+//Pop to LCL[0]
 //Partial Pop, point to memory address but don't move to register or operate on.
 @SP
 M=M-1
 A=M
 //END Partial Pop
 D=M
-@R15
+@LCL
 A=M
 M=D
-//END Pop to LCL[]
-//push argument 0
+//END Pop to LCL[0]
+//Command:push argument 0
 //Push ARG[0] to Stack
 @ARG
 A=M
@@ -99,7 +86,7 @@ A=M
 M=D
 @SP
 M=M+1
-//push constant 1
+//Command:push constant 1
 @1
 D=A
 //Push D to SP
@@ -108,7 +95,7 @@ A=M
 M=D
 @SP
 M=M+1
-//sub
+//Command:sub
 //Partial Pop, point to memory address but don't move to register or operate on.
 @SP
 M=M-1
@@ -128,26 +115,19 @@ M=D
 @SP
 M=M+1
 //- completed.
-//pop argument 0      // counter--
-//Pop to ARG[]
-@ARG
-A=M
-D=A
-@
-D=D+A
-@R15
-M=D
+//Command:pop argument 0      // counter--
+//Pop to ARG[0]
 //Partial Pop, point to memory address but don't move to register or operate on.
 @SP
 M=M-1
 A=M
 //END Partial Pop
 D=M
-@R15
+@ARG
 A=M
 M=D
-//END Pop to ARG[]
-//push argument 0
+//END Pop to ARG[0]
+//Command:push argument 0
 //Push ARG[0] to Stack
 @ARG
 A=M
@@ -158,13 +138,16 @@ A=M
 M=D
 @SP
 M=M+1
-//if-goto LOOP_START  // If counter != 0, goto LOOP_START
+//Command:if-goto LOOP_START  // If counter != 0, goto LOOP_START
 //Partial Pop, point to memory address but don't move to register or operate on.
 @SP
 M=M-1
 A=M
 //END Partial Pop
-@LOOP_STARTM; JEQ//push local 0
+D=M
+@LOOP_START
+D; JNE
+//Command:push local 0
 //Push LCL[0] to Stack
 @LCL
 A=M
