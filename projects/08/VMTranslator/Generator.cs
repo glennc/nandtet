@@ -1,5 +1,6 @@
 
 
+using System;
 using System.Xml.Serialization;
 
 public class HackAssemblyGenerator : IDisposable
@@ -85,7 +86,7 @@ public class HackAssemblyGenerator : IDisposable
 		//label ID for return address.
 		//TODO: This can probably just be a constant string with an incrementing ID.
 		var returnId = _rnd.Next().ToString("x");
-		SaveSegment(returnId);
+        PushToStack(returnId);
 		SaveSegment("LCL");
 		SaveSegment("ARG");
 		SaveSegment("THIS");
@@ -112,7 +113,14 @@ public class HackAssemblyGenerator : IDisposable
         _outputWriter.WriteLine($"({returnId})");
     }
 
-    private void SaveSegment(string segment)
+	private void SaveSegment(string segment)
+	{
+        _outputWriter.WriteLine($"@{segment}");
+        _outputWriter.WriteLine("D=M");
+		WritePushDToStack(_outputWriter);
+    }
+
+    private void PushToStack(string segment)
 	{
         _outputWriter.WriteLine($"@{segment}");
         _outputWriter.WriteLine("D=A");
@@ -180,7 +188,8 @@ public class HackAssemblyGenerator : IDisposable
 	{
 		//TODO: Probably shouldn't scatter the assembly syntax for writing a label around the file.
 		//Write label for function name.
-        _outputWriter.WriteLine($"({command.Arg1})");
+        
+		_outputWriter.WriteLine($"({command.Arg1})");
 		//Setup functions memory.
 		_outputWriter.WriteLine("D=0");
         for (int i = 0; i < int.Parse(command.Arg2); i++)

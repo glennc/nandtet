@@ -26,7 +26,7 @@ var generator = new HackAssemblyGenerator(stream, bootstrap);
 foreach (var file in Directory.EnumerateFiles(directoryPath, "*.vm"))
 {
     var parser = new Parser(file);
-    generator.SetFile(Path.GetFileNameWithoutExtension(directoryPath));
+    generator.SetFile(Path.GetFileNameWithoutExtension(file));
 
     while (parser.HasMoreLines)
     {
