@@ -26,7 +26,11 @@ public class Parser
         "sub",
         "neg",
         "not",
-        "lt"
+        "lt",
+        "gt",
+        "eq",
+        "or",
+        "and"
     };
 
     public void Advance()

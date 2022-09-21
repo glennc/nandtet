@@ -2,7 +2,7 @@
   "profiles": {
     "VMTranslator": {
       "commandName": "Project",
-      "commandLineArgs": "C:\\src\\GitHub\\glennc\\nandtet\\projects\\08\\FunctionCalls"
+      "commandLineArgs": "C:\\src\\GitHub\\glennc\\nandtet\\projects\\09"
     }
   }
 }
