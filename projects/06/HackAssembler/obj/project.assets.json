@@ -8,26 +8,24 @@
     "net6.0": []
   },
   "packageFolders": {
-    "C:\\Users\\glenn\\.nuget\\packages\\": {}
+    "/Users/glenn/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\src\\GitHub\\glennc\\nandtet\\projects\\06\\HackAssembler\\HackAssembler.csproj",
+      "projectUniqueName": "/Users/glenn/code/nandtet/projects/06/HackAssembler/HackAssembler.csproj",
       "projectName": "HackAssembler",
-      "projectPath": "C:\\src\\GitHub\\glennc\\nandtet\\projects\\06\\HackAssembler\\HackAssembler.csproj",
-      "packagesPath": "C:\\Users\\glenn\\.nuget\\packages\\",
-      "outputPath": "C:\\src\\GitHub\\glennc\\nandtet\\projects\\06\\HackAssembler\\obj\\",
+      "projectPath": "/Users/glenn/code/nandtet/projects/06/HackAssembler/HackAssembler.csproj",
+      "packagesPath": "/Users/glenn/.nuget/packages/",
+      "outputPath": "/Users/glenn/code/nandtet/projects/06/HackAssembler/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\glenn\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/Users/glenn/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -51,7 +49,8 @@
           "net47",
           "net471",
           "net472",
-          "net48"
+          "net48",
+          "net481"
         ],
         "assetTargetFallback": true,
         "warn": true,
@@ -60,7 +59,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.300-preview.22204.3\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.400/RuntimeIdentifierGraph.json"
       }
     }
   }

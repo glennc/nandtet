@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "zbi7aFxLKBLe3FREpfoxQ5T2/L7XLcTSqREFru4EjNOmiij5sgJet25noMA5FV2USraTZd149RznP7pCgO3e3Q==",
+  "dgSpecHash": "kZN2xAG0oPItmG3TEYb2/ZfmM/L7pSbIwU2O3O1yRlw1hN8bT7bEj0f0B1BREQ88ZCaqFaQOXUAfpbgHLtB8Fw==",
   "success": true,
-  "projectFilePath": "C:\\src\\GitHub\\glennc\\nandtet\\projects\\06\\HackAssembler\\HackAssembler.csproj",
+  "projectFilePath": "/Users/glenn/code/nandtet/projects/06/HackAssembler/HackAssembler.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

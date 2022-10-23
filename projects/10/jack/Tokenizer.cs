@@ -1,9 +1,13 @@
 using System.IO;
+using System.Text;
+using System.Text.RegularExpressions;
 
 public class JackTokenizer : IDisposable
 {
     private string _file;
     private StreamReader _inputStream;
+
+    private Regex _commentRegex = new Regex("/\\*(.)*?\\*/");
 
     private List<string> _keywords = new List<string> {
         "class",
@@ -29,8 +33,8 @@ public class JackTokenizer : IDisposable
         "return"
     };
 
-    private List<char> _symbols = new List<char> {
-        '{','}','(',')','[',']','.',',',';','+','-','*','/','&','|','<','>','=','~'
+    private List<string> _symbols = new List<string> {
+        "{","}","(",")","[","]",".",",",";","+","-","*","/","&","|","<",">","=","~"
     };
 
     public bool HasMoreTokens
@@ -47,46 +51,133 @@ public class JackTokenizer : IDisposable
         _inputStream = new StreamReader(File.OpenRead(file));
     }
 
-    public Token Advance()
+    public IEnumerable<Token> Advance()
     {
-        string line;
-        do
+        while(HasMoreTokens)
         {
-            line = _inputStream.ReadLine().Trim();
-        }
-        while (string.IsNullOrWhiteSpace(line) || line.StartsWith("//"));
-
-        if (line.Contains("//"))
-        {
-            line = line.Split("//")[0].Trim();
-        }
-
-        //TODO: Handle /* and */
-
-        var token = new Token(line);
-
-
-        if(_symbols.Contains(line[0]))
-        {
-            token.TokenType = TokenType.SYMBOL;
-            token.Source = line[0].ToString();
-        }
-        else
-        {        
-            string currentToken = "";
-            foreach(var character in line)
+            string line = string.Empty;
+            do
             {
-                currentToken += character;
-                if(_keywords.Contains(currentToken))
+                line = _inputStream.ReadLine();
+
+                if(line is null)
                 {
+                    yield return null;
+                }
+
+                line = line.Trim();
+
+                line = _commentRegex.Replace(line ?? "", "");
+            }
+            while (string.IsNullOrWhiteSpace(line) || line.StartsWith("//"));
+
+            if (line.Contains("//"))
+            {
+                line = line.Split("//")[0].Trim();
+            }
+
+            string currentSource = "";
+            bool inString = false;
+
+            if(line.StartsWith("/*"))
+            {
+                do
+                {
+                    line = _inputStream.ReadLine()?.Trim();
+                }
+                while(!line.EndsWith("*/"));
+                line = _inputStream.ReadLine()?.Trim();
+            }
+
+            foreach(var inChar in line)
+            {
+                if(inString)
+                {
+                    if(inChar == '"')
+                    {
+                        yield return new Token(line){
+                            TokenType = TokenType.STRING_CONST,
+                            Source = currentSource
+                        };
+                        currentSource = "";
+                        inString = false;
+                        continue;
+                    }
+                    currentSource += inChar;
+                    continue;
+                }
+
+                if(Char.IsWhiteSpace(inChar))
+                {
+                    //discards leading whitespace after known keywords.
+                    if(string.IsNullOrEmpty(currentSource))
+                        continue;
+                    
+                    if(int.TryParse(currentSource, out _))
+                    {
+                        yield return new Token(line) {
+                            TokenType = TokenType.INT_CONST,
+                            Source = currentSource
+                        };
+                    }
+                    else
+                    {
+                        var token = new Token(line);
+                        token.TokenType = TokenType.IDENTIFIER;
+                        token.Source = currentSource;
+                        yield return token;
+                    }
+                    currentSource = "";
+                    continue;
+                }
+
+                if(_symbols.Contains(inChar.ToString()))
+                {
+                    if(!string.IsNullOrEmpty(currentSource))
+                    {
+                        if(int.TryParse(currentSource, out _))
+                        {
+                            yield return new Token(line) {
+                                TokenType = TokenType.INT_CONST,
+                                Source = currentSource
+                            };
+                        }
+                        else
+                        {
+                            yield return new Token(line) {
+                                TokenType = TokenType.IDENTIFIER,
+                                Source = currentSource
+                            };
+                        }
+                    }
+                    var token = new Token(line);
+                    token.TokenType = TokenType.SYMBOL;
+                    token.Source = inChar.ToString();
+                    yield return token;
+                    currentSource = "";
+                    continue;
+                }
+
+                if(inChar == '"')
+                {
+                    inString = true;
+                    continue;   
+                }
+
+                currentSource += inChar;
+                
+                if(_keywords.Contains(currentSource))
+                {
+                    var token = new Token(line);
                     token.TokenType = TokenType.KEYWORD;
-                    token.KeywordType = Enum.Parse<KeywordType>(currentToken, true);
+                    token.KeywordType = Enum.Parse<KeywordType>(currentSource, true);
+                    token.Source = currentSource;
+                    yield return token;
+                    currentSource = "";
+                    continue;
                 }
             }
-            token.Source = currentToken;
         }
-
-        return token;
     }
 
     public void Dispose()
